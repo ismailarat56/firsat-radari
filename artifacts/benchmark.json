@@ -1,0 +1,38 @@
+{
+  "measuredAt": "2026-10-15T02:21:48.180Z",
+  "method": "Production esbuild server bundle; real Express/SQLite; in-process HTTP injection because socket creation is blocked. Browser and network transport EXCLUDED.",
+  "environment": {
+    "node": "v24.19.0",
+    "os": "linux 7.0.0-38-generic",
+    "cpu": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
+    "logicalCpus": 12,
+    "totalMemoryGiB": 14.95
+  },
+  "dataset": {
+    "sources": 50,
+    "items": 1000,
+    "snapshots": 100
+  },
+  "warmupsPerOperation": 20,
+  "samplesPerOperation": 200,
+  "filteredList": {
+    "p50Ms": 28.497,
+    "p95Ms": 31.73,
+    "maxMs": 42.188
+  },
+  "diff": {
+    "p50Ms": 0.793,
+    "p95Ms": 1.458,
+    "maxMs": 3.092
+  },
+  "failures": 0,
+  "process": {
+    "scope": "Only the benchmark Node process containing Express/SQLite; browser and external collectors excluded.",
+    "rssMiB": 363.18,
+    "heapUsedMiB": 39.31,
+    "peakRssMiB": 455.18,
+    "cpuUserMs": 7079.094,
+    "cpuSystemMs": 353.689
+  },
+  "target": "p95 < 300 ms; these handler measurements do not certify socket/network/browser latency."
+}

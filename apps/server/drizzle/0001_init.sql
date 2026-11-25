@@ -1,0 +1,25 @@
+
+CREATE TABLE IF NOT EXISTS sources (id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)), created_at TEXT NOT NULL, archived INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS source_configs (source_id TEXT NOT NULL REFERENCES sources(id), version INTEGER NOT NULL, data TEXT NOT NULL, created_at TEXT NOT NULL, PRIMARY KEY(source_id,version));
+CREATE TABLE IF NOT EXISTS observations (id TEXT PRIMARY KEY, source_id TEXT NOT NULL REFERENCES sources(id), started_at TEXT NOT NULL, data TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS observations_source ON observations(source_id,started_at DESC);
+CREATE TABLE IF NOT EXISTS snapshots (id TEXT PRIMARY KEY, source_id TEXT NOT NULL REFERENCES sources(id), config_version INTEGER NOT NULL, normalization_version INTEGER NOT NULL, observed_at TEXT NOT NULL, hash TEXT NOT NULL, document TEXT NOT NULL, etag TEXT, last_modified TEXT);
+CREATE INDEX IF NOT EXISTS snapshots_source ON snapshots(source_id,observed_at DESC);
+CREATE TABLE IF NOT EXISTS items (id TEXT PRIMARY KEY, source_id TEXT NOT NULL REFERENCES sources(id), identity TEXT NOT NULL, data TEXT NOT NULL CHECK(json_valid(data)), UNIQUE(source_id,identity));
+CREATE INDEX IF NOT EXISTS items_source ON items(source_id);
+CREATE TABLE IF NOT EXISTS item_versions (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES items(id), snapshot_id TEXT REFERENCES snapshots(id) ON DELETE SET NULL, content TEXT NOT NULL, hash TEXT NOT NULL, created_at TEXT NOT NULL, UNIQUE(item_id,snapshot_id));
+CREATE TABLE IF NOT EXISTS diffs (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES items(id), before_id TEXT REFERENCES item_versions(id), after_id TEXT NOT NULL REFERENCES item_versions(id), created_at TEXT NOT NULL, UNIQUE(item_id,after_id));
+CREATE TABLE IF NOT EXISTS decisions (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES items(id), action TEXT NOT NULL, reason TEXT, created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS deadline_candidates (id TEXT PRIMARY KEY, item_id TEXT NOT NULL REFERENCES items(id), data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS confirmed_deadlines (item_id TEXT PRIMARY KEY REFERENCES items(id), version INTEGER NOT NULL, data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS evidence (snapshot_id TEXT NOT NULL REFERENCES snapshots(id) ON DELETE RESTRICT, item_id TEXT NOT NULL REFERENCES items(id), protected_at TEXT NOT NULL, PRIMARY KEY(snapshot_id,item_id));
+CREATE TABLE IF NOT EXISTS notifications (id TEXT PRIMARY KEY, item_id TEXT REFERENCES items(id), event_key TEXT NOT NULL UNIQUE, data TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS jobs (id TEXT PRIMARY KEY, source_id TEXT NOT NULL REFERENCES sources(id), idempotency_key TEXT, status TEXT NOT NULL, next_attempt_at TEXT NOT NULL, delay_reason TEXT, attempts INTEGER NOT NULL DEFAULT 0, lease_until TEXT, lease_owner TEXT, created_at TEXT NOT NULL, UNIQUE(source_id,idempotency_key));
+CREATE UNIQUE INDEX IF NOT EXISTS one_active_job ON jobs(source_id) WHERE status IN ('queued','running');
+CREATE INDEX IF NOT EXISTS jobs_due ON jobs(status,next_attempt_at);
+CREATE TABLE IF NOT EXISTS host_budgets (host TEXT PRIMARY KEY, next_allowed_at TEXT NOT NULL, lease_until TEXT, lease_owner TEXT);
+CREATE TABLE IF NOT EXISTS network_budgets (host TEXT PRIMARY KEY, next_at TEXT NOT NULL, lease_until TEXT, owner TEXT);
+CREATE TABLE IF NOT EXISTS sessions (token_hash TEXT PRIMARY KEY, csrf_token TEXT NOT NULL, expires_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS previews (id TEXT PRIMARY KEY, source_id TEXT NOT NULL REFERENCES sources(id), config_version INTEGER NOT NULL, expires_at TEXT NOT NULL, document TEXT NOT NULL, metadata TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS events (id TEXT PRIMARY KEY, name TEXT NOT NULL, entity_id TEXT, created_at TEXT NOT NULL);
