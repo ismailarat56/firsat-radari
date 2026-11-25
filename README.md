@@ -1,148 +1,152 @@
+**English** · [Türkçe](README.tr.md)
+
 <div align="center">
 
 # Fırsat Radarı
 
-**RSS/Atom beslemelerini ve statik HTML bölgelerini izleyen, her değişikliği önceki haliyle birlikte gösteren yerel uygulama.**
+**A local app that watches RSS/Atom feeds and static HTML regions and shows every change together with its previous state.**
 
 ![Node.js](https://img.shields.io/badge/Node.js-22.12%2B-339933?logo=nodedotjs&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61DAFB)
-![Lisans](https://img.shields.io/badge/lisans-MIT-2ea44f)
+![License](https://img.shields.io/badge/license-MIT-2ea44f)
 
-[Öne çıkanlar](#öne-çıkanlar) · [Ekran görüntüleri](#ekran-görüntüleri) · [Kurulum](#kurulum-ve-çalıştırma) · [Testler](#testler) · [Belgeler](#belgeler)
+[Highlights](#highlights) · [Screenshots](#screenshots) · [Setup](#setup-and-running) · [Tests](#tests) · [Documentation](#documentation)
 
-![İnceleme masası: gelişme listesi ve kanıt okuyucusu](artifacts/frontend-redesign/after/reader-1440.png)
+![Review desk: update list and evidence reader](artifacts/frontend-redesign/after/reader-1440.png)
 
 </div>
 
-Fırsat Radarı, kamuya açık RSS/Atom beslemelerini ve seçtiğiniz statik HTML bölgelerini izler; anlamlı değişikliği önceki görüntüsüyle yan yana gösterir. Burs, kariyer ve etkinlik duyurularını takip eden öğrenciler, yeni mezunlar ve kariyer danışmanları için tasarlandı; tek kullanıcılıdır ve yalnız kendi bilgisayarınızda çalışır. TypeScript ile yazıldı: sunucu tarafında Express 5 ve SQLite (better-sqlite3, Drizzle), arayüzde React 19 ve Vite.
+Fırsat Radarı (Opportunity Radar) watches public RSS/Atom feeds and the static HTML regions you choose, and shows a meaningful change side by side with its previous snapshot. It was designed for students, new graduates and career advisors who follow scholarship, career and event announcements. It is single-user and runs only on your own computer. It is written in TypeScript: Express 5 and SQLite (better-sqlite3, Drizzle) on the back end, React 19 and Vite on the front end.
 
-## Öne çıkanlar
+The user interface is in Turkish. The detailed documents under `docs/` are in Turkish.
 
-- **Kaynak türleri:** RSS/Atom beslemeleri ve CSS seçicisiyle belirlenen statik HTML bölgeleri izlenir.
-- **Kanıtlı fark:** her değişiklik önceki ve yeni görüntüyle, eklenen ve kaldırılan bölümler işaretli olarak açılır.
-- **Başlangıç onayı:** ilk görüntü önizlenip onaylanır ve bildirim üretmez; seçici değişince yeni başlangıç istenir.
-- **Karar akışı:** İnceledim, Kaydet, İlgisiz ve Arşivle kararları kanıtıyla birlikte saklanır.
-- **Onaylı son tarihler:** kaynaktan çıkarılan tarih adayları siz onaylamadan takvime ve hatırlatmaya girmez.
-- **Güvenli toplama:** yalnız HTTP/HTTPS ve 80/443 portları; özel, loopback ve metadata adresleri engellenir, bağlantı doğrulanan IP'ye sabitlenir.
-- **Nezaket sınırları:** host başına tek eşzamanlı istek ve en az 10 saniye ara; robots, crawl-delay ve Retry-After uygulanır.
-- **Kalıcı kuyruk:** elle ve zamanlanmış kontroller aynı SQLite kuyruğunu kullanır; bekleme nedeni arayüzde görünür.
-- **Yerel oturum:** sunucu yalnız `127.0.0.1` üzerinde dinler; terminalde gösterilen tek kullanımlık kodla eşleştirme, HttpOnly cookie ve CSRF denetimi.
-- **Yedekleme:** çalışan veritabanından tutarlı yedek alınır; geri yükleme öncesi bütünlük ve şema denetlenir.
-- **Demo modu:** ayrı veri dizininde 8 örnek kaynak ve 12 fırsatla açılır; normal veritabanına karışmaz.
+## Highlights
 
-Ayrıntılar: [docs/KULLANIM.md](docs/KULLANIM.md) ve [docs/YAPILANDIRMA.md](docs/YAPILANDIRMA.md)
+- **Source types:** RSS/Atom feeds and static HTML regions selected with a CSS selector are watched.
+- **Diff with evidence:** every change opens with the previous and the new snapshot, with added and removed parts marked.
+- **Baseline approval:** the first snapshot is previewed and approved, and produces no notification. When the selector changes, a new baseline is required.
+- **Decision flow:** the decisions İnceledim (Reviewed), Kaydet (Save), İlgisiz (Not relevant) and Arşivle (Archive) are stored together with their evidence.
+- **Confirmed deadlines:** date candidates extracted from the source do not enter the calendar or the reminders until you confirm them.
+- **Safe fetching:** only HTTP/HTTPS and ports 80/443. Private, loopback and metadata addresses are blocked, and the connection is pinned to the validated IP.
+- **Politeness limits:** one concurrent request per host and at least 10 seconds between requests. robots, crawl-delay and Retry-After are applied.
+- **Persistent queue:** manual and scheduled checks use the same SQLite queue. The reason for a wait is shown in the interface.
+- **Local session:** the server listens only on `127.0.0.1`. Pairing with a one-time code shown in the terminal, an HttpOnly cookie and a CSRF check.
+- **Backup:** a consistent backup is taken from the running database. Integrity and schema are checked before a restore.
+- **Demo mode:** opens in a separate data directory with 8 sample sources and 12 opportunities. It does not mix with the normal database.
 
-## Ekran görüntüleri
+Details: [docs/KULLANIM.md](docs/KULLANIM.md) and [docs/YAPILANDIRMA.md](docs/YAPILANDIRMA.md)
+
+## Screenshots
 
 <table>
   <tr>
-    <td width="50%"><img src="artifacts/frontend-redesign/after/expanded-evidence-1440.png" alt="Tam genişlikte önce ve sonra farkı"></td>
-    <td width="50%"><img src="artifacts/frontend-redesign/after/sources-1440.png" alt="Kaynaklar ekranı"></td>
+    <td width="50%"><img src="artifacts/frontend-redesign/after/expanded-evidence-1440.png" alt="Full-width before and after diff"></td>
+    <td width="50%"><img src="artifacts/frontend-redesign/after/sources-1440.png" alt="Sources screen"></td>
   </tr>
   <tr>
-    <td align="center">Kanıt okuyucusu, tam genişlik: önceki ve yeni görüntü yan yana</td>
-    <td align="center">Kaynaklar: durum, son başarılı kontrol ve sonraki kontrol zamanı</td>
+    <td align="center">Evidence reader, full width: previous and new snapshot side by side</td>
+    <td align="center">Sources: status, last successful check and next check time</td>
   </tr>
   <tr>
-    <td width="50%"><img src="artifacts/frontend-redesign/after/source-form.png" alt="Kaynak ekleme formu"></td>
-    <td width="50%"><img src="artifacts/frontend-redesign/after/calendar-1440.png" alt="Takvim ajandası"></td>
+    <td width="50%"><img src="artifacts/frontend-redesign/after/source-form.png" alt="Add source form"></td>
+    <td width="50%"><img src="artifacts/frontend-redesign/after/calendar-1440.png" alt="Calendar agenda"></td>
   </tr>
   <tr>
-    <td align="center">Kaynak ekleme: RSS/Atom ya da statik web sayfası</td>
-    <td align="center">Takvim: yalnız onaylanmış son tarihler</td>
+    <td align="center">Adding a source: RSS/Atom or a static web page</td>
+    <td align="center">Calendar: confirmed deadlines only</td>
   </tr>
 </table>
 
-Üstteki büyük görsel: inceleme masasında gelişme listesi ve açık kanıt okuyucusu. Görüntüler demo verisiyle alındı; kurum adları ve duyurular örnektir. 768 ve 390 px görüntüleri ile önceki tasarım [artifacts/frontend-redesign](artifacts/frontend-redesign/) altındadır.
+The large image at the top: the update list and the open evidence reader on the review desk. The screenshots were taken with demo data; the institution names and announcements are examples. The 768 and 390 px screenshots and the previous design are under [artifacts/frontend-redesign](artifacts/frontend-redesign/).
 
-## Gereksinimler
+## Requirements
 
-- Node.js 22.12 veya üstü ve npm. Geliştirme Node 24.19.0 / npm 11.17.0 / Ubuntu 26.04.1 üzerinde yapıldı.
-- Linux. npm betikleri ortam değişkenlerini POSIX sözdizimiyle verir (`FR_DEMO=1 npm run dev`).
-- `better-sqlite3` için platformda hazır binary yoksa C++ derleme araçları ve Python.
-- Tarayıcı testleri için sistemde Chrome ya da Chromium (yoksa `npx playwright install chromium`).
+- Node.js 22.12 or later and npm. Development was done on Node 24.19.0 / npm 11.17.0 / Ubuntu 26.04.1.
+- Linux. The npm scripts set environment variables with POSIX syntax (`FR_DEMO=1 npm run dev`).
+- C++ build tools and Python, if there is no prebuilt `better-sqlite3` binary for the platform.
+- Chrome or Chromium on the system for the browser tests (if missing, `npx playwright install chromium`).
 
-## Kurulum ve çalıştırma
+## Setup and running
 
-Komutları proje kökünde çalıştırın.
+Run the commands in the project root.
 
 ```bash
 npm ci
 npm run demo
 ```
 
-Tarayıcıda `http://127.0.0.1:5173` adresini açın. Demo, `.local/demo` dizininde örnek verilerle açılır ve otomatik tarama yapmaz.
+Open `http://127.0.0.1:5173` in the browser. The demo opens with sample data in the `.local/demo` directory and does not scan automatically.
 
-Kendi kaynaklarınızla boş bir çalışma alanı için:
+For an empty workspace with your own sources:
 
 ```bash
 npm run dev
 ```
 
-Aynı adresi açın ve terminalde gösterilen eşleştirme kodunu girin. Kod tek kullanımlıktır ve 10 dakika geçerlidir.
+Open the same address and enter the pairing code shown in the terminal. The code is single-use and valid for 10 minutes.
 
-Production derlemesi arayüzü ve API'yi tek adresten (`http://127.0.0.1:4318`) sunar:
+The production build serves the front end and the API from one address (`http://127.0.0.1:4318`):
 
 ```bash
 npm run build
 npm start
 ```
 
-Ortam değişkenleri (`FR_PORT`, `FR_DATA_DIR`, `FR_DEMO`) [.env.example](.env.example) içinde belgelenir. Veri dizini, izinler ve derlenmiş demo için: [docs/YAPILANDIRMA.md](docs/YAPILANDIRMA.md)
+The environment variables (`FR_PORT`, `FR_DATA_DIR`, `FR_DEMO`) are documented in [.env.example](.env.example). For the data directory, permissions and the built demo: [docs/YAPILANDIRMA.md](docs/YAPILANDIRMA.md)
 
-## Nasıl çalışır
+## How it works
 
-1. Kaynak eklenir: RSS/Atom adresi ya da bir HTML sayfası ve izlenecek bölgenin CSS seçicisi.
-2. Önizleme alınır ve başlangıç görüntüsü onaylanır.
-3. Zamanlayıcı kaynağı varsayılan 6 saatte bir (en kısa 30 dakika) kontrol eder; elle kontrol aynı kuyruğa girer.
-4. Yeni görüntü öncekiyle karşılaştırılır; fark varsa gelişme ve bildirim oluşur.
-5. Kanıt incelenir, karar verilir ve varsa son tarih onaylanır.
+1. A source is added: an RSS/Atom address, or an HTML page and the CSS selector of the region to watch.
+2. A preview is taken and the baseline snapshot is approved.
+3. The scheduler checks the source every 6 hours by default (30 minutes at the shortest). A manual check enters the same queue.
+4. The new snapshot is compared with the previous one. If there is a difference, an update and a notification are created.
+5. The evidence is reviewed, a decision is made and the deadline, if any, is confirmed.
 
-En fazla 50 kaynak eklenebilir. Kaynak başına 30 görüntü ya da 90 gün saklanır; karara bağlı kanıt ayrı 100 MiB kotada korunur. Adım adım anlatım, yedekleme ve sorun giderme: [docs/KULLANIM.md](docs/KULLANIM.md)
+Up to 50 sources can be added. 30 snapshots or 90 days are kept per source; evidence tied to a decision is kept in a separate 100 MiB quota. Step-by-step guide, backup and troubleshooting: [docs/KULLANIM.md](docs/KULLANIM.md)
 
-## Mimari
+## Architecture
 
-- **`apps/server`:** Express API. Oturum, kaynak, gözlem, karar ve bildirim servisleri; güvenli HTTP adaptörü; SQLite üzerinde kalıcı iş kuyruğu.
-- **`apps/web`:** React arayüzü. Veri TanStack Query ile API'den gelir; diyaloglar Radix, stiller Tailwind CSS ve tasarım değişkenleri.
-- **`packages/shared`:** Zod sözleşmeleri ile HTTP ve arayüzden bağımsız normalizasyon, fark ve tarih kuralları.
+- **`apps/server`:** Express API. Session, source, observation, decision and notification services; a safe HTTP adapter; a persistent job queue on SQLite.
+- **`apps/web`:** React front end. Data comes from the API through TanStack Query; dialogs use Radix, styles use Tailwind CSS and design tokens.
+- **`packages/shared`:** Zod contracts, and normalization, diff and date rules that are independent of HTTP and the front end.
 
-Geliştirmede Vite `/api` isteklerini 4318 portundaki sunucuya yönlendirir. Tasarım kararları: [docs/DECISIONS.md](docs/DECISIONS.md)
+In development, Vite forwards `/api` requests to the server on port 4318. Design decisions: [docs/DECISIONS.md](docs/DECISIONS.md)
 
-## API özeti
+## API summary
 
-| Uç | İşlev |
+| Endpoint | Purpose |
 |---|---|
-| `POST /api/pair`, `POST /api/logout` | Terminal koduyla eşleştirme ve çıkış |
-| `GET` / `POST /api/sources` | Kaynakları listeleme ve ekleme |
-| `POST /api/sources/:id/preview`, `/baseline`, `/check` | Önizleme, başlangıç onayı, elle kontrol |
-| `GET /api/items`, `GET /api/items/:id/diff` | Gelişme listesi ve önce/sonra farkı |
-| `POST /api/items/:id/decisions`, `/deadline-confirmations` | Karar ve son tarih onayı |
-| `GET /api/notifications`, `GET /api/settings` | Bildirimler ve çalışma tercihleri |
-| `POST /api/backups`, `POST /api/restore` | Yedek alma ve geri yükleme |
+| `POST /api/pair`, `POST /api/logout` | Pairing with the terminal code, and logout |
+| `GET` / `POST /api/sources` | List and add sources |
+| `POST /api/sources/:id/preview`, `/baseline`, `/check` | Preview, baseline approval, manual check |
+| `GET /api/items`, `GET /api/items/:id/diff` | Update list and before/after diff |
+| `POST /api/items/:id/decisions`, `/deadline-confirmations` | Decision and deadline confirmation |
+| `GET /api/notifications`, `GET /api/settings` | Notifications and working preferences |
+| `POST /api/backups`, `POST /api/restore` | Take a backup and restore |
 
-Tüm uçlar `apps/server/src/app.ts` içinde tanımlıdır.
+All endpoints are defined in `apps/server/src/app.ts`.
 
-## Klasör yapısı
+## Folder structure
 
 ```
 apps/
-  server/src/     Express uygulaması: auth, db, jobs, modules, network, storage
+  server/src/     Express application: auth, db, jobs, modules, network, storage
   server/drizzle/ SQL migration
-  web/src/        React arayüzü: components, features, lib, styles
+  web/src/        React front end: components, features, lib, styles
 packages/
-  shared/src/     sözleşmeler, normalizasyon, fark ve tarih kuralları
+  shared/src/     contracts, normalization, diff and date rules
 tests/
-  unit/           birim testleri
-  ui/             jsdom üzerinde React testleri
-  integration/    Express ve SQLite ile API testleri
-  e2e/            Playwright senaryoları ve test sunucusu
-  bench/          liste ve fark uçları için ölçüm betiği
-scripts/          lisans envanteri betiği
-artifacts/        ekran görüntüleri, ölçüm ve lisans çıktıları
-docs/             plan, kararlar, test ve performans raporları
+  unit/           unit tests
+  ui/             React tests on jsdom
+  integration/    API tests with Express and SQLite
+  e2e/            Playwright scenarios and test server
+  bench/          measurement script for the list and diff endpoints
+scripts/          license inventory script
+artifacts/        screenshots, measurement and license outputs
+docs/             plan, decisions, test and performance reports
 ```
 
-## Testler
+## Tests
 
 ```bash
 npm run typecheck
@@ -153,26 +157,26 @@ npm run test:e2e
 npm run bench
 ```
 
-`npm test` birim ve arayüz testlerini, `npm run test:integration` Express ve SQLite sınırlarını çalıştırır. `npm run test:e2e` önce derleme yapar, sonra Playwright ile 4329 ve 4330 portlarında geçici veritabanlı test sunucularını açar. Son kayıtlı çalıştırmada 26 birim/arayüz, 64 entegrasyon ve 9 tarayıcı testi geçti. Koşullar: [docs/TESTLER.md](docs/TESTLER.md), sonuçlar: [docs/TEST-REPORT.md](docs/TEST-REPORT.md)
+`npm test` runs the unit and UI tests. `npm run test:integration` runs the Express and SQLite boundaries. `npm run test:e2e` builds first, then uses Playwright to start test servers with temporary databases on ports 4329 and 4330. In the last recorded run, 26 unit/UI, 64 integration and 9 browser tests passed. Conditions: [docs/TESTLER.md](docs/TESTLER.md), results: [docs/TEST-REPORT.md](docs/TEST-REPORT.md)
 
-## Bilinen eksikler
+## Known gaps
 
-- Canlı kurum kaynaklarıyla doğrulama ve kullanıcı pilotu yapılmadı; testler kontrollü örnek veriyle çalışır.
-- JavaScript ile oluşan içerik ve giriş, CAPTCHA ya da ücret duvarı arkasındaki sayfalar izlenmez.
-- Uygulama ya da bilgisayar kapalıyken izleme sürmez; açılışta gözlem boşluğu gösterilir.
-- SQLite verisi ve yedekler şifreli değildir.
-- Güncel `npm audit` sonucu yok; önceki deneme registry DNS hatasıyla bitti.
+- No validation against live institutional sources and no user pilot has been done. The tests run on controlled sample data.
+- Content rendered by JavaScript and pages behind a login, CAPTCHA or paywall are not watched.
+- Watching does not continue while the app or the computer is off. The observation gap is shown at startup.
+- The SQLite data and the backups are not encrypted.
+- There is no current `npm audit` result. The previous attempt ended with a registry DNS error.
 
-Açık kabul adımları: [docs/TEST-REPORT.md](docs/TEST-REPORT.md#açık-kabul-adımları)
+Open acceptance steps: [docs/TEST-REPORT.md](docs/TEST-REPORT.md#açık-kabul-adımları)
 
-## Belgeler
+## Documentation
 
-- [Kullanım](docs/KULLANIM.md): ilk akış, yedekleme, sorun giderme.
-- [Yapılandırma ve sınırlar](docs/YAPILANDIRMA.md): veri dizini, ortam değişkenleri, izleme sınırları.
-- [Testler](docs/TESTLER.md), [test raporu](docs/TEST-REPORT.md) ve [performans ölçümü](docs/PERFORMANCE.md).
-- [Plan](docs/PLAN.md), [mimari kararlar](docs/DECISIONS.md), [ürün ve pilot tanımı](docs/PRODUCT.md), [ilerleme](docs/PROGRESS.md).
-- [Arayüz yenileme raporu](docs/FRONTEND-REDESIGN.md) ve [bağımlılık lisansları](docs/LICENSES.md).
+- [Usage](docs/KULLANIM.md): first flow, backup, troubleshooting.
+- [Configuration and limits](docs/YAPILANDIRMA.md): data directory, environment variables, watch limits.
+- [Tests](docs/TESTLER.md), [test report](docs/TEST-REPORT.md) and [performance measurement](docs/PERFORMANCE.md).
+- [Plan](docs/PLAN.md), [architecture decisions](docs/DECISIONS.md), [product and pilot definition](docs/PRODUCT.md), [progress](docs/PROGRESS.md).
+- [Front-end redesign report](docs/FRONTEND-REDESIGN.md) and [dependency licenses](docs/LICENSES.md).
 
-## Lisans
+## License
 
-Kod [MIT lisansı](LICENSE) ile sunulur. Üçüncü taraf bildirimleri: [docs/THIRD-PARTY-NOTICES.txt](docs/THIRD-PARTY-NOTICES.txt)
+The code is released under the [MIT license](LICENSE). Third-party notices: [docs/THIRD-PARTY-NOTICES.txt](docs/THIRD-PARTY-NOTICES.txt)

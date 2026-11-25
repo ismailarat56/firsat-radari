@@ -1,8 +1,8 @@
-[← README'ye dön](../README.md)
+[← README'ye dön](../README.tr.md)
 
 # Kullanım
 
-Hızlı başlangıç, ilk akış, yedekleme ve sorun giderme ayrıntıları. Kısa kurulum özeti [README](../README.md#kurulum-ve-çalıştırma) içindedir.
+Hızlı başlangıç, ilk akış, yedekleme ve sorun giderme ayrıntıları. Kısa kurulum özeti [README](../README.tr.md#kurulum-ve-çalıştırma) içindedir.
 
 ## Arayüz
 

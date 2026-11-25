@@ -49,4 +49,4 @@ Bağımsız kod incelemesindeki arama odağı kaybı, önce hatayı yeniden üre
 
 Canlı kurum kaynakları ve kullanıcı pilotu bu görsel yenilemede değerlendirilmedi. Önceki audit çalışmasının registry DNS engeli bu teslimde yeniden değerlendirilmedi; güncel güvenlik taraması yapıldığı iddia edilmiyor. Yayınlama veya gerçek kaynaklara toplu işlem yapılmadı. Git metaverisi bulunmadığından commit/PR oluşturulmadı.
 
-Yerel önizleme: proje kökünde `npm run demo`, ardından `http://127.0.0.1:5173`. Ayrıntılı kurulum [README](../README.md) içinde.
+Yerel önizleme: proje kökünde `npm run demo`, ardından `http://127.0.0.1:5173`. Ayrıntılı kurulum [README](../README.tr.md) içinde.
